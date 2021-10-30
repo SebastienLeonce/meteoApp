@@ -1,4 +1,4 @@
-# meteo_app
+# meteo
 
 ## Project setup
 ```

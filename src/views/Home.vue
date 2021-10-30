@@ -1,18 +1,67 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+    <ui-textfield v-model="city_name" @change="queryWeather">
+      City Name
+      <template #before>
+        <ui-textfield-icon>location_city</ui-textfield-icon>
+      </template>
+    </ui-textfield>
+
+    <p>City name: {{ city_name }}</p>
+
+    <ui-card>
+      <ui-card-content>
+        <ui-card-media>
+          <img :src="weather_data.current?.condition.icon" alt="">
+          <p>{{ weather_data.current?.condition.text }}</p>
+        </ui-card-media>
+        <ui-card-text>Température à {{ weather_data.location?.name}} : {{ weather_data.current?.temp_c }} °C</ui-card-text>
+      </ui-card-content>
+    </ui-card>
+
   </div>
 </template>
 
-<script lang="ts">
-import { Options, Vue } from "vue-class-component";
-import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
+<script>
+// @ is an alias to /src
+//import HelloWorld from '@/components/HelloWorld.vue'
 
-@Options({
+export default {
+  name: 'Home',
   components: {
-    HelloWorld,
+    //HelloWorld
   },
-})
-export default class Home extends Vue {}
+  data () {
+    return {
+      city_name : '',
+      weather_data: {}
+    }
+  },
+  methods: {
+    queryWeather () {
+      this.axios.get('http://api.weatherapi.com/v1/current.json', {
+        params: {
+          key: '87660a1cef9e43ab8cc133646213010',
+          q: this.city_name,
+          aqi: 'no'
+        }
+      }).then( (response) => {
+        this.weather_data = response.data
+        console.log(response.data)
+      })
+    }
+  }
+}
+//http://api.weatherapi.com/v1/current.json?key=87660a1cef9e43ab8cc133646213010&q=London&aqi=no
+// that.axios.get('/api',{
+//                 params: {
+//                     period: (d.getMonth() + 1) + "/" + d.getFullYear()
+//                 }
+//             }).then(function (response) {
+//                 that.depenses = response.data;
+//                 that.data = that.depenses.slice((that.page - 1)*8, (that.page - 1)*8 + 8)
+//                 that.total = response.data.length;
+//             }).catch(function (error) {
+//                 console.log(error);
+//             });
 </script>

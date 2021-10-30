@@ -1,6 +1,12 @@
 module.exports = {
-  rules: {
-    "@typescript-eslint/no-var-requires": "off",
-    "no-unused-expressions": "off",
+  plugins: [
+    'cypress'
+  ],
+  env: {
+    mocha: true,
+    'cypress/globals': true
   },
-};
+  rules: {
+    strict: 'off'
+  }
+}
