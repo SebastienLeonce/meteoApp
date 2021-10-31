@@ -39,9 +39,10 @@ export default {
   },
   methods: {
     queryWeather () {
+      console.log(process.env)
       this.axios.get('http://api.weatherapi.com/v1/current.json', {
         params: {
-          key: '87660a1cef9e43ab8cc133646213010',
+          key: process.env.VUE_APP_API_WEATHER,
           q: this.city_name,
           aqi: 'no'
         }
