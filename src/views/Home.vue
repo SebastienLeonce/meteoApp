@@ -12,6 +12,7 @@
     <ui-card>
       <ui-card-content>
         <ui-card-media>
+          <img :src="city_photo" />
           <img :src="weather_data.current?.condition.icon" alt="">
           <p>{{ weather_data.current?.condition.text }}</p>
         </ui-card-media>
@@ -34,12 +35,12 @@ export default {
   data () {
     return {
       city_name : '',
+      city_photo: '',
       weather_data: {}
     }
   },
   methods: {
     queryWeather () {
-      console.log(process.env)
       this.axios.get('http://api.weatherapi.com/v1/current.json', {
         params: {
           key: process.env.VUE_APP_API_WEATHER,
@@ -48,21 +49,21 @@ export default {
         }
       }).then( (response) => {
         this.weather_data = response.data
-        console.log(response.data)
-      })
+          this.axios.get('https://maps.googleapis.com/maps/api/place/textsearch/json', {
+            params: {
+              key: process.env.VUE_APP_API_GOOGLE,
+              query: this.city_name
+            }
+          }).then( (response) => {
+            fetch('https://maps.googleapis.com/maps/api/place/photo?key=' + process.env.VUE_APP_API_GOOGLE + "&photoreference=" + response.data.results[0].photos[0].photo_reference + "&maxheight=300&maxwidth=300")
+              .then( (response) => {
+                return response.blob();
+              }).then( (response) => {
+                this.city_photo = URL.createObjectURL(response);
+              })
+          })
+        })
     }
   }
 }
-//http://api.weatherapi.com/v1/current.json?key=87660a1cef9e43ab8cc133646213010&q=London&aqi=no
-// that.axios.get('/api',{
-//                 params: {
-//                     period: (d.getMonth() + 1) + "/" + d.getFullYear()
-//                 }
-//             }).then(function (response) {
-//                 that.depenses = response.data;
-//                 that.data = that.depenses.slice((that.page - 1)*8, (that.page - 1)*8 + 8)
-//                 that.total = response.data.length;
-//             }).catch(function (error) {
-//                 console.log(error);
-//             });
 </script>
