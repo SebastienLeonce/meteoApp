@@ -38,11 +38,7 @@ export default {
                     query: city_name.value
                     }
                 }).then( (response) => {
-                    fetch('https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/photo?key=' + process.env.VUE_APP_API_GOOGLE + "&photoreference=" + response.data.results[0].photos[0].photo_reference + "&maxheight=300&maxwidth=300", 
-                    {
-                        mode: 'cors',
-                        headers: new Headers({'Access-Control-Allow-Origin':'*'})
-                    })
+                    fetch('https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/photo?key=' + process.env.VUE_APP_API_GOOGLE + "&photoreference=" + response.data.results[0].photos[0].photo_reference + "&maxheight=300&maxwidth=300")
                     .then( (response) => {
                         return response.blob();
                     }).then( (response) => {
