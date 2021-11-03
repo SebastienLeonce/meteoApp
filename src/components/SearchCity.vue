@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 import axios from 'axios';
 import { useStore } from 'vuex'
 
@@ -18,9 +18,10 @@ export default {
         const store      = useStore()
 
         const city_name  = ref('')
-        let weather_data = reactive({})
 
         const queryWeather = () => {
+            let weather_data = {}
+
             axios.get('http://api.weatherapi.com/v1/current.json', {
                 params: {
                 key: process.env.VUE_APP_API_WEATHER,
@@ -48,7 +49,6 @@ export default {
 
         return {
             city_name,
-            weather_data,
             queryWeather
         }
     },
