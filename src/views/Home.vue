@@ -39,8 +39,12 @@ export default {
   data () {
     return {
       city_name : '',
-      weather_data: {},
-      data: []
+      weather_data: {}
+    }
+  },
+  computed: {
+    data() {
+      return this.$store.state.data
     }
   },
   methods: {
@@ -64,7 +68,7 @@ export default {
                 return response.blob();
               }).then( (response) => {
                 this.weather_data.city_photo = URL.createObjectURL(response);
-                this.data.push(this.weather_data);
+                this.$store.commit('push', this.weather_data);
               })
           })
         })
