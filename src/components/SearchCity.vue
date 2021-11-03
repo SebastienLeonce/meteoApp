@@ -32,13 +32,17 @@ export default {
                 weather_data = response.data;
                 weather_data.time = new Date().toLocaleString();
                 weather_data.city_name = response.data.location.name;
-                axios.get('https://maps.googleapis.com/maps/api/place/textsearch/json', {
+                axios.get('https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/textsearch/json', {
                     params: {
                     key: process.env.VUE_APP_API_GOOGLE,
                     query: city_name.value
                     }
                 }).then( (response) => {
-                    fetch('https://maps.googleapis.com/maps/api/place/photo?key=' + process.env.VUE_APP_API_GOOGLE + "&photoreference=" + response.data.results[0].photos[0].photo_reference + "&maxheight=300&maxwidth=300")
+                    fetch('https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/photo?key=' + process.env.VUE_APP_API_GOOGLE + "&photoreference=" + response.data.results[0].photos[0].photo_reference + "&maxheight=300&maxwidth=300", 
+                    {
+                        mode: 'cors',
+                        headers: new Headers({'Access-Control-Allow-Origin':'*'})
+                    })
                     .then( (response) => {
                         return response.blob();
                     }).then( (response) => {
