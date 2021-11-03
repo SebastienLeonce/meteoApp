@@ -10,6 +10,9 @@
 </template>
 
 <script>
+import { useStore } from 'vuex'
+import { computed } from 'vue'
+
 import WeatherCard from '@/components/WeatherCard.vue'
 import SearchCity from '@/components/SearchCity.vue'
 
@@ -19,14 +22,15 @@ export default {
     WeatherCard,
     SearchCity
   },
-  computed: {
-    data() {
-      return this.$store.state.data
+  setup () {
+    const store = useStore()
+
+    store.commit('initialiseStore');
+
+    return {
+      data: computed(() => store.state.data),
     }
   },
-  beforeCreate() {
-		this.$store.commit('initialiseStore');
-	},
 }
 </script>
 
