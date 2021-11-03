@@ -8,41 +8,51 @@
 </template>
 
 <script>
+import { ref, reactive } from 'vue'
+import axios from 'axios';
+import { useStore } from 'vuex'
+
 export default {
-  name: 'SearchCity',
-  data () {
-    return {
-      city_name : '',
-      weather_data: {}
-    }
-  },
-  methods: {
-    queryWeather () {
-      this.axios.get('http://api.weatherapi.com/v1/current.json', {
-        params: {
-          key: process.env.VUE_APP_API_WEATHER,
-          q: this.city_name,
-          aqi: 'no'
+    name: 'SearchCity',
+    setup() {
+        const store      = useStore()
+
+        const city_name  = ref('')
+        let weather_data = reactive({})
+
+        const queryWeather = () => {
+            axios.get('http://api.weatherapi.com/v1/current.json', {
+                params: {
+                key: process.env.VUE_APP_API_WEATHER,
+                q: city_name.value,
+                aqi: 'no'
+                }
+            }).then( (response) => {
+                weather_data = response.data
+                axios.get('https://maps.googleapis.com/maps/api/place/textsearch/json', {
+                    params: {
+                    key: process.env.VUE_APP_API_GOOGLE,
+                    query: city_name.value
+                    }
+                }).then( (response) => {
+                    fetch('https://maps.googleapis.com/maps/api/place/photo?key=' + process.env.VUE_APP_API_GOOGLE + "&photoreference=" + response.data.results[0].photos[0].photo_reference + "&maxheight=300&maxwidth=300")
+                    .then( (response) => {
+                        return response.blob();
+                    }).then( (response) => {
+                        weather_data.city_photo = URL.createObjectURL(response);
+                        store.commit('push', weather_data);
+                    })
+                })
+            })
         }
-      }).then( (response) => {
-        this.weather_data = response.data
-          this.axios.get('https://maps.googleapis.com/maps/api/place/textsearch/json', {
-            params: {
-              key: process.env.VUE_APP_API_GOOGLE,
-              query: this.city_name
-            }
-          }).then( (response) => {
-            fetch('https://maps.googleapis.com/maps/api/place/photo?key=' + process.env.VUE_APP_API_GOOGLE + "&photoreference=" + response.data.results[0].photos[0].photo_reference + "&maxheight=300&maxwidth=300")
-              .then( (response) => {
-                return response.blob();
-              }).then( (response) => {
-                this.weather_data.city_photo = URL.createObjectURL(response);
-                this.$store.commit('push', this.weather_data);
-              })
-          })
-        })
-    }
-  }
+
+        return {
+            city_name,
+            weather_data,
+            queryWeather
+        }
+    },
+ 
 }
 </script>
 
