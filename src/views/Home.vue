@@ -47,6 +47,9 @@ export default {
       return this.$store.state.data
     }
   },
+  beforeCreate() {
+		this.$store.commit('initialiseStore');
+	},
   methods: {
     queryWeather () {
       this.axios.get('http://api.weatherapi.com/v1/current.json', {
