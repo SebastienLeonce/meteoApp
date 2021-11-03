@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div>
     <ui-textfield v-model="city_name" @change="queryWeather" class="input-search">
       City Name
       <template #before>
@@ -8,21 +8,7 @@
     </ui-textfield>
 
     <div class="card-container">
-      <ui-card class="card" v-for="weather in data" :key=weather.id>
-        <ui-card-content>
-          <ui-card-media class="card-content-media">
-            <img :src="weather.city_photo"/>
-          </ui-card-media>
-          <ui-divider></ui-divider>
-          <ui-card-text>
-            <div class="card-content-text-img">
-              <img :src="weather.current?.condition.icon" alt="">
-              <p>{{ weather.current?.condition.text }}</p>
-            </div>
-            <p>Température à {{ weather.location?.name}} : {{ weather.current?.temp_c }} °C</p>
-          </ui-card-text>
-        </ui-card-content>
-      </ui-card>
+      <weather-card v-for="weather in data" :weather=weather :key=weather.id />
     </div>
 
   </div>
@@ -30,12 +16,12 @@
 
 <script>
 // @ is an alias to /src
-//import HelloWorld from '@/components/HelloWorld.vue'
+import WeatherCard from '@/components/WeatherCard.vue'
 
 export default {
   name: 'Home',
   components: {
-    //HelloWorld
+    WeatherCard
   },
   data () {
     return {
@@ -87,22 +73,6 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-}
-
-.card {
-  margin: 1%;
-}
-
-.card-content-text-img {
-  display: flex;
-  justify-content: center;
-}
-
-.card-content-media {
-  height: 300px;
-  width: 300px;
-  display:flex;
-  align-items:center;
 }
 
 .input-search {
