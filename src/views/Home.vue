@@ -92,6 +92,7 @@ export default {
 
 .input-search {
   margin: 1%;
+  width: -webkit-fill-available;
 }
 
 </style>
