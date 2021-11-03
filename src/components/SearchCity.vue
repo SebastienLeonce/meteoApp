@@ -29,7 +29,9 @@ export default {
                 aqi: 'no'
                 }
             }).then( (response) => {
-                weather_data = response.data
+                weather_data = response.data;
+                weather_data.time = new Date().toLocaleString();
+                weather_data.city_name = response.data.location.name;
                 axios.get('https://maps.googleapis.com/maps/api/place/textsearch/json', {
                     params: {
                     key: process.env.VUE_APP_API_GOOGLE,
