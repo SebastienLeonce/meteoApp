@@ -13,6 +13,7 @@
           <ui-card-media class="card-content-media">
             <img :src="weather.city_photo"/>
           </ui-card-media>
+          <ui-divider></ui-divider>
           <ui-card-text>
             <div class="card-content-text-img">
               <img :src="weather.current?.condition.icon" alt="">
