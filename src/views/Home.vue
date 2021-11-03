@@ -10,8 +10,8 @@
     <div class="card-container">
       <ui-card class="card" v-for="weather in data" :key=weather.id>
         <ui-card-content>
-          <ui-card-media>
-            <img :src="weather.city_photo" />
+          <ui-card-media class="card-content-media">
+            <img :src="weather.city_photo"/>
           </ui-card-media>
           <ui-card-text>
             <div class="card-content-text-img">
@@ -95,6 +95,13 @@ export default {
 .card-content-text-img {
   display: flex;
   justify-content: center;
+}
+
+.card-content-media {
+  height: 300px;
+  width: 300px;
+  display:flex;
+  align-items:center;
 }
 
 .input-search {
