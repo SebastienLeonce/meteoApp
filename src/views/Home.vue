@@ -1,24 +1,28 @@
 <template>
   <div class="home">
-    <ui-textfield v-model="city_name" @change="queryWeather">
+    <ui-textfield v-model="city_name" @change="queryWeather" class="input-search">
       City Name
       <template #before>
         <ui-textfield-icon>location_city</ui-textfield-icon>
       </template>
     </ui-textfield>
 
-    <p>City name: {{ city_name }}</p>
-
-    <ui-card>
-      <ui-card-content>
-        <ui-card-media>
-          <img :src="city_photo" />
-          <img :src="weather_data.current?.condition.icon" alt="">
-          <p>{{ weather_data.current?.condition.text }}</p>
-        </ui-card-media>
-        <ui-card-text>Température à {{ weather_data.location?.name}} : {{ weather_data.current?.temp_c }} °C</ui-card-text>
-      </ui-card-content>
-    </ui-card>
+    <div class="card-container">
+      <ui-card class="card" v-for="weather in data" :key=weather.id>
+        <ui-card-content>
+          <ui-card-media>
+            <img :src="weather.city_photo" />
+          </ui-card-media>
+          <ui-card-text>
+            <div class="card-content-text-img">
+              <img :src="weather.current?.condition.icon" alt="">
+              <p>{{ weather.current?.condition.text }}</p>
+            </div>
+            <p>Température à {{ weather.location?.name}} : {{ weather.current?.temp_c }} °C</p>
+          </ui-card-text>
+        </ui-card-content>
+      </ui-card>
+    </div>
 
   </div>
 </template>
@@ -35,8 +39,8 @@ export default {
   data () {
     return {
       city_name : '',
-      city_photo: '',
-      weather_data: {}
+      weather_data: {},
+      data: []
     }
   },
   methods: {
@@ -59,7 +63,8 @@ export default {
               .then( (response) => {
                 return response.blob();
               }).then( (response) => {
-                this.city_photo = URL.createObjectURL(response);
+                this.weather_data.city_photo = URL.createObjectURL(response);
+                this.data.push(this.weather_data);
               })
           })
         })
@@ -67,3 +72,26 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card {
+  margin: 1%;
+}
+
+.card-content-text-img {
+  display: flex;
+  justify-content: center;
+}
+
+.input-search {
+  margin: 1%;
+}
+
+</style>
