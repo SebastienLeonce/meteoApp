@@ -25,7 +25,7 @@ export default {
 
             axios.get('http://api.weatherapi.com/v1/current.json', {
                 params: {
-                key: process.env.VUE_APP_API_WEATHER,
+                key: process.env.VUE_APP_API_WEATHER || 'null',
                 q: city_name.value,
                 aqi: 'no'
                 }
